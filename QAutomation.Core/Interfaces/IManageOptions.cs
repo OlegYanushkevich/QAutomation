@@ -2,7 +2,7 @@
 {
     public interface IManageOptions
     {
-        ICookieService Cookies();
-        IWindowService Windows();
+        ICookiesService Cookies();
+        IWindowsService Windows();
     }
 }

@@ -22,17 +22,17 @@
 
         internal ISearchContext Context => _element ?? Driver as ISearchContext;
 
-        public Element(IWebDriver driver, IWebElement element, Core.By locator, IUnityContainer container)
+        public Element(WebDriver driver, IWebElement element, Core.By locator, IUnityContainer container)
         {
             _element = element;
             Locator = locator;
 
             _container = container;
             _service = new ElementFinderService(_container);
-            Driver = driver;
+            WebDriver = driver;
         }
 
-        public IWebDriver Driver { get; private set; }
+        public IWebDriver Driver => WebDriver.Driver;
 
         public string Content => _element.Text;
 

@@ -1,7 +1,6 @@
 ﻿namespace QAutomation.Core.Interfaces
 {
     using QAutomation.Core.Interfaces.Controls;
-    using System;
     using System.Collections.Generic;
 
     public interface IElementFinderService

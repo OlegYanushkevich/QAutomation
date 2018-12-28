@@ -4,7 +4,7 @@
     using QAutomation.Core.Interfaces;
     using System.Collections.Generic;
 
-    public class WindowsService : IWindowService
+    public class WindowsService : IWindowsService
     {
 
         private readonly Core.Interfaces.IWindow _current;

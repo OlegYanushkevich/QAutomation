@@ -1,8 +1,6 @@
 ﻿namespace QAutomation.Core
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     [Flags]
     public enum State

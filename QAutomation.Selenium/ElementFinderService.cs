@@ -16,25 +16,22 @@
             _container = container;
         }
 
-        public TElement Find<TElement>(WebDriver driver, ISearchContext context, Core.By by)
+        public TElement Find<TElement>(WebDriver driver, Core.By by)
             where TElement : IElement
         {
-            var current = context ?? driver.Driver;
-            var element = current.FindElement(by.Cast());
-
-            return Resolve<TElement>(driver.Driver, element, by);
+            var element = driver.Driver.FindElement(by.Cast());
+            return Resolve<TElement>(driver, element, by);
         }
 
-        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, ISearchContext context, Core.By by)
-            where TElement : class, IElement
+        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.By by)
+            where TElement : IElement
         {
-            var current = context ?? driver.Driver;
-            var elements = current.FindElements(by.Cast());
+            var elements = driver.Driver.FindElements(by.Cast());
 
             var list = new List<TElement>();
 
             foreach (var element in elements)
-                list.Add(Resolve<TElement>(driver.Driver, element, by));
+                list.Add(Resolve<TElement>(driver, element, by));
 
             return list;
         }
@@ -44,11 +41,10 @@
         {
             ISearchContext context = null;
 
-            if (parent is IFrameElement frame)
+            if (parent is FrameElement frame)
             {
-                parent.WebDriver.SwitchTo().Frame(parent.Locator);
-                context = parent.WebDriver.Driver;
-                parent.WebDriver.CurrentFrame = frame;
+                frame.Switch();
+                context = frame.Driver as ISearchContext;
             }
             else
                 context = parent.Context;
@@ -58,7 +54,7 @@
             var list = new List<TElement>();
 
             foreach (var element in elements)
-                list.Add(Resolve<TElement>(parent.Driver, element, by));
+                list.Add(Resolve<TElement>(parent.WebDriver, element, by));
 
             return list;
         }
@@ -68,28 +64,27 @@
         {
             ISearchContext context = null;
 
-            if (parent is IFrameElement frame)
+            if (parent is FrameElement frame)
             {
-                parent.WebDriver.SwitchTo().Frame(frame.Locator);
-                //context = parent.Driver.SwitchTo().Frame(frame.GetAttribute("name"));
-                //parent.WebDriver.CurrentFrame = frame;
+                frame.Switch();
+                context = frame.Driver as ISearchContext;
             }
             else
                 context = parent.Context;
 
             var element = context.FindElement(by.Cast());
-            return Resolve<TElement>(parent.Driver, element, by);
+            return Resolve<TElement>(parent.WebDriver, element, by);
         }
 
-        private TElement Resolve<TElement>(IWebDriver driver, IWebElement current, Core.By by)
+        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.By by)
             where TElement : IElement
         {
             return _container.Resolve<TElement>(new ResolverOverride[]
             {
-                new ParameterOverride("element", current),
-                new ParameterOverride("container", _container),
-                new ParameterOverride("locator", by),
-                new ParameterOverride("driver", driver)
+                 new ParameterOverride("driver", driver),
+                 new ParameterOverride("element", current),
+                 new ParameterOverride("locator", by),
+                 new ParameterOverride("container", _container)
             });
         }
     }

@@ -3,9 +3,6 @@
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
     using QAutomation.Selenium.Controls;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
 
     public class TargetLocatorService : ITargetLocatorService
     {
@@ -23,22 +20,16 @@
         {
             if (_driver.CurrentFrame != null)
             {
-                _driver.SwitchTo().DefaultContent();
+                _driver.Driver.SwitchTo().DefaultContent();
                 _driver.CurrentFrame = null;
             }
 
             return _driver;
         }
 
-        public IDriver Frame(Core.By by)
-        {
-            var frame = _driver.Find<FrameElement>(by);
-            _driver.Driver.SwitchTo().Frame(frame.WrappedElement);
+        public IDriver Frame(Core.By by) => _driver.Find<IFrameElement>(by).Switch();
 
-            _driver.CurrentFrame = frame;
-            return _driver;
-        }
-
+        public IDriver Frame(IFrameElement frame) => frame.Switch();
 
         public IWindow Window(string handle)
         {

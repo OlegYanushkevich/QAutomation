@@ -2,5 +2,6 @@
 {
     public interface IFrameElement : IElement
     {
+        IDriver Switch();
     }
 }

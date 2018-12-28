@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public interface IWindowService
+    public interface IWindowsService
     {
         IWindow Current { get; }
         IReadOnlyCollection<string> Handles { get; }

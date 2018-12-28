@@ -5,16 +5,16 @@
 
     public class ManageOptionsService : IManageOptions
     {
-        private readonly CookieService _cookieService;
+        private readonly CookiesService _cookieService;
         private readonly WindowsService _windowsService;
 
         public ManageOptionsService(IWebDriver driver)
         {
-            _cookieService = new CookieService(driver.Manage().Cookies);
+            _cookieService = new CookiesService(driver.Manage().Cookies);
             _windowsService = new WindowsService(driver);
         }
 
-        public ICookieService Cookies() => _cookieService;
-        public IWindowService Windows() => _windowsService;
+        public ICookiesService Cookies() => _cookieService;
+        public IWindowsService Windows() => _windowsService;
     }
 }

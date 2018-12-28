@@ -11,7 +11,7 @@
         string Source { get; }
 
         Size Size { get; set; }
-        Point Location { get; set; }
+        Point Position { get; set; }
 
         IWindow Maximize();
         IWindow Minimize();

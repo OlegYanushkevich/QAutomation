@@ -1,12 +1,12 @@
 ﻿namespace QAutomation.Selenium
 {
-    using OpenQA.Selenium;
+    using QAutomation.Core.Interfaces;
 
-    public class Alert : Core.Interfaces.IAlert
+    public class Alert : IAlert
     {
-        private readonly IAlert _alert;
+        private readonly OpenQA.Selenium.IAlert _alert;
 
-        public Alert(IAlert alert)
+        public Alert(OpenQA.Selenium.IAlert alert)
         {
             _alert = alert;
         }

@@ -12,7 +12,7 @@
     using System.Text;
     using Unity;
 
-    public class WebDriver : IDriver
+    public partial class WebDriver : IDriver
     {
         internal IFrameElement CurrentFrame { get; set; }
 
@@ -43,11 +43,7 @@
             _finderService = new ElementFinderService(_container);
         }
 
-        public T ExecuteJavaScript<T>(string script)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public IManageOptions Manage() => new ManageOptionsService(Driver);
         public INavigationService Navigate() => new NavigationService(Driver.Navigate());
 
@@ -61,12 +57,12 @@
 
         public TElement Find<TElement>(Core.By by) where TElement : IElement
         {
-            return _finderService.Find<TElement>(this, null, by);
+            return _finderService.Find<TElement>(this, by);
         }
 
         public IEnumerable<TElement> FindAll<TElement>(Core.By by) where TElement : IElement
         {
-            throw new NotImplementedException();
+            return _finderService.FindAll<TElement>(this, by);
         }
     }
 }

@@ -2,18 +2,25 @@
 {
     using global::Unity;
     using OpenQA.Selenium;
-    using QAutomation.Core;
+    using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Unity;
 
     public class FrameElement : Element, IFrameElement
     {
-        public FrameElement(IWebDriver driver, IWebElement element, Core.By locator, IUnityContainer container)
+        public FrameElement(WebDriver driver, IWebElement element, Core.By locator, IUnityContainer container)
             : base(driver, element, locator, container)
         {
+        }
+
+        public IDriver Switch()
+        {
+            if(WebDriver.CurrentFrame != this)
+            {
+                WebDriver.Driver.SwitchTo().Frame(WrappedElement);
+                WebDriver.CurrentFrame = this;
+            }
+
+            return WebDriver;
         }
     }
 }

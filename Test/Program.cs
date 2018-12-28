@@ -1,11 +1,13 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using QAutomation.Core.Interfaces;
 using QAutomation.Core.Interfaces.Controls;
 using QAutomation.Selenium;
 using QAutomation.Selenium.Configs;
 using QAutomation.Selenium.Controls;
 using System;
 using Unity;
+using Unity.Resolution;
 
 namespace Test
 {
@@ -13,28 +15,24 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
             var container = new UnityContainer();
+            var config = new ChromeWebDriverConfig();
 
             container.RegisterType<IElement, Element>();
             container.RegisterType<IFrameElement, FrameElement>();
 
-            var config = new ChromeWebDriverConfig();
+            container.RegisterType<IDriver, WebDriver>();
 
-            var driver = new WebDriver(config, container);
+            var driver = container.Resolve<IDriver>(new ResolverOverride[]
+            {
+                new ParameterOverride("config", config),
+                new ParameterOverride("container", container)
+             });
 
-            driver.Navigate().Url("https://www.w3schools.com/tags/tryit.asp?filename=tryhtml_iframe");
+            driver.Navigate().Url("https://www.google.com");
 
-            var src = driver.Manage().Windows().Current.Source;
+            driver.ExecuteJavaScript("arguments[0].click()", new QAutomation.Core.By(QAutomation.Core.LocatorType.Xpath, "(.//input[@name='btnI'])[2]"));
 
-            var element = driver.Find<FrameElement>(new QAutomation.Core.By(QAutomation.Core.LocatorType.Xpath, ".//iframe[@id='iframeResult']"));
-
-            var body = driver._finderService.Find<IElement>(element, new QAutomation.Core.By(QAutomation.Core.LocatorType.Xpath, ".//body"));
-
-            var neww = driver.SwitchTo().DefaultContent();
-
-            driver.Manage().Windows().Current.FullScreen();
         }
     }
 }

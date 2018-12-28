@@ -26,7 +26,7 @@
             set => _driver.Manage().Window.Size = new System.Drawing.Size(value.Width, value.Height);
         }
 
-        public Point Location
+        public Point Position
         {
             get
             {
