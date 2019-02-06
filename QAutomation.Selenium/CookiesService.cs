@@ -44,7 +44,6 @@
         public Core.Cookie GetByName(string cookieName)
         {
             var sel = _cookieJar.GetCookieNamed(cookieName);
-
             return new Core.Cookie(sel.Name, sel.Value, sel.Path, sel.Domain, sel.Expiry);
         }
     }
