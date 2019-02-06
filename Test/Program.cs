@@ -8,6 +8,7 @@ using QAutomation.Selenium.Controls;
 using System;
 using Unity;
 using Unity.Resolution;
+using QAutomation.Core;
 
 namespace Test
 {
@@ -29,10 +30,9 @@ namespace Test
                 new ParameterOverride("container", container)
              });
 
-            driver.Navigate().Url("https://www.google.com");
+            driver.Navigate().Url("https://yandex.ru");
 
-            driver.ExecuteJavaScript("arguments[0].click()", new QAutomation.Core.By(QAutomation.Core.LocatorType.Xpath, "(.//input[@name='btnI'])[2]"));
-
+            driver.ExecuteJavaScript("arguments[0].click()", new object[] { driver.Find<IElement>(new QAutomation.Core.By(LocatorType.Xpath, ".//*[@class='region__cityname']"))});
         }
     }
 }
