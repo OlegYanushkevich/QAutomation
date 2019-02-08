@@ -1,42 +1,45 @@
 ﻿namespace QAutomation.Selenium
 {
-    using global::Unity;
-    using global::Unity.Resolution;
+    using System.Collections.Generic;
     using OpenQA.Selenium;
     using QAutomation.Core.Interfaces.Controls;
     using QAutomation.Selenium.Controls;
-    using System.Collections.Generic;
+    using global::Unity;
+    using global::Unity.Resolution;
 
-    public class ElementFinderService
+    internal class ElementFinderService
     {
-        private readonly IUnityContainer _container;
+        private readonly IUnityContainer container;
 
         public ElementFinderService(IUnityContainer container)
         {
-            _container = container;
+            this.container = container;
         }
 
-        public TElement Find<TElement>(WebDriver driver, Core.By by)
+        public TElement Find<TElement>(WebDriver driver, Core.Locator by)
             where TElement : IElement
         {
             var element = driver.Driver.FindElement(by.Cast());
-            return Resolve<TElement>(driver, element, by);
+            return this.Resolve<TElement>(driver, element, by);
         }
 
-        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.By by)
+        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.Locator by)
             where TElement : IElement
         {
             var elements = driver.Driver.FindElements(by.Cast());
 
             var list = new List<TElement>();
 
-            foreach (var element in elements)
-                list.Add(Resolve<TElement>(driver, element, by));
+            for (int i = 0; i < elements.Count; i++)
+            {
+                IWebElement element = elements[i];
+                list.Add(item: this.Resolve<TElement>(driver, element, by));
+            }
 
             return list;
         }
 
-        public IEnumerable<TElement> FindAll<TElement>(Element parent, Core.By by)
+        public IEnumerable<TElement> FindAll<TElement>(Element parent, Core.Locator by)
             where TElement : IElement
         {
             ISearchContext context = null;
@@ -47,19 +50,24 @@
                 context = frame.Driver as ISearchContext;
             }
             else
+            {
                 context = parent.Context;
+            }
 
             var elements = context.FindElements(by.Cast());
 
             var list = new List<TElement>();
 
-            foreach (var element in elements)
-                list.Add(Resolve<TElement>(parent.WebDriver, element, by));
+            for (int i = 0; i < elements.Count; i++)
+            {
+                IWebElement element = elements[i];
+                list.Add(item: this.Resolve<TElement>(parent.WebDriver, element, by));
+            }
 
             return list;
         }
 
-        public TElement Find<TElement>(Element parent, Core.By by)
+        public TElement Find<TElement>(Element parent, Core.Locator by)
             where TElement : IElement
         {
             ISearchContext context = null;
@@ -70,21 +78,22 @@
                 context = frame.Driver as ISearchContext;
             }
             else
+            {
                 context = parent.Context;
+            }
 
             var element = context.FindElement(by.Cast());
-            return Resolve<TElement>(parent.WebDriver, element, by);
+            return this.Resolve<TElement>(parent.WebDriver, element, by);
         }
 
-        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.By by)
-            where TElement : IElement
+        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.Locator by) where TElement : IElement
         {
-            return _container.Resolve<TElement>(new ResolverOverride[]
+            return this.container.Resolve<TElement>(new ResolverOverride[]
             {
                  new ParameterOverride("driver", driver),
                  new ParameterOverride("element", current),
                  new ParameterOverride("locator", by),
-                 new ParameterOverride("container", _container)
+                 new ParameterOverride("container", this.container)
             });
         }
     }

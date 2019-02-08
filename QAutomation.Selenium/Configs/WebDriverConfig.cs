@@ -41,6 +41,10 @@
             return driver;
         }
 
+        /// <summary>
+        /// Configuration and getting new instance of the <see cref="IWebDriver"/> interface
+        /// </summary>
+        /// <returns><see cref="IWebDriver"/></returns>
         public abstract IWebDriver CreateRemoteDriver();
         public abstract IWebDriver CreateLocalDriver();
 

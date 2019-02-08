@@ -4,51 +4,28 @@
 
     public class Cookie
     {
-        private string _cookieName;
-        private string _cookieValue;
-
-        private string _cookiePath;
-        private string _cookieDomain;
-
-        private DateTime? _cookieExpiry;
-
         public Cookie(string name, string value, string path, string domain, DateTime? expireDate)
         {
-            _cookieName = name;
-            _cookieValue = value;
-            _cookieDomain = domain;
-            _cookiePath = path;
-            _cookieExpiry = expireDate;
+            this.Name = name;
+            this.Value = value;
+            this.Domain = domain;
+            this.Path = path;
+            this.Expiry = expireDate;
         }
 
-        public string Name
-        {
-            get { return _cookieName; }
-        }
+        public string Name { get; }
 
-        public string Value
-        {
-            get { return _cookieValue; }
-        }
+        public string Value { get; }
 
-        public string Domain
-        {
-            get { return _cookieDomain; }
-        }
+        public string Domain { get; }
 
-        public virtual string Path
-        {
-            get { return _cookiePath; }
-        }
+        public string Path { get; }
 
         public virtual bool Secure
         {
             get { return false; }
         }
 
-        public DateTime? Expiry
-        {
-            get { return _cookieExpiry; }
-        }
+        public DateTime? Expiry { get; }
     }
 }

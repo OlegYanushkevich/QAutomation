@@ -14,7 +14,7 @@
             _cookieJar = cookieJar;
         }
 
-        public IReadOnlyCollection<Core.Cookie> Cookies => 
+        public IReadOnlyCollection<Core.Cookie> Cookies =>
             _cookieJar.AllCookies.Select(c => new Core.Cookie(c.Name, c.Value, c.Path, c.Domain, c.Expiry)).ToList().AsReadOnly();
 
         public ICookiesService Add(Core.Cookie cookie)

@@ -4,18 +4,21 @@
 
     public class Alert : IAlert
     {
-        private readonly OpenQA.Selenium.IAlert _alert;
+        private readonly OpenQA.Selenium.IAlert alert;
 
         public Alert(OpenQA.Selenium.IAlert alert)
         {
-            _alert = alert;
+            this.alert = alert;
         }
 
-        public string Text => _alert.Text;
-        public void Accept() => _alert.Accept();
-        public void Dismiss() => _alert.Dismiss();
+        public string Text => alert.Text;
 
-        public void SendKeys(string keysToSend) => _alert.SendKeys(keysToSend);
-        public void SetAuthenticationCredentials(string userName, string password) => SetAuthenticationCredentials(userName, password);
+        public void Accept() => alert.Accept();
+
+        public void Dismiss() => alert.Dismiss();
+
+        public void SendKeys(string keysToSend) => alert.SendKeys(keysToSend);
+
+        public void SetAuthenticationCredentials(string userName, string password) => alert.SetAuthenticationCredentials(userName, password);
     }
 }

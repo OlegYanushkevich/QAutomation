@@ -1,23 +1,43 @@
-﻿namespace QAutomation.Selenium
+﻿//-----------------------------------------------------------------------
+// <copyright file="WindowsService.cs" company="EPAM">
+//     Copyright (c) EPAM Systems Inc. All rights reserved.
+// </copyright>
+// <author>Oleg Yanushkevich</author>
+//----------------
+namespace QAutomation.Selenium
 {
+    using System.Collections.Generic;
     using OpenQA.Selenium;
     using QAutomation.Core.Interfaces;
-    using System.Collections.Generic;
 
+    /// <summary>
+    /// Service for managing browser windows
+    /// </summary>
     public class WindowsService : IWindowsService
     {
+        /// <summary>
+        /// Field that contains <see cref="IWebDriver"/> instance
+        /// </summary>
+        private readonly IWebDriver driver;
 
-        private readonly Core.Interfaces.IWindow _current;
-        private readonly IWebDriver _driver;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsService"/> class.
+        /// </summary>
+        /// <param name="driver">instance of web driver</param>
         public WindowsService(IWebDriver driver)
         {
-            _driver = driver;
-            _current = new Window(_driver);
+            this.driver = driver;
+            this.Current = new Window(this.driver);
         }
 
-        public Core.Interfaces.IWindow Current => _current;
+        /// <summary>
+        /// Gets current browser window
+        /// </summary>
+        public Core.Interfaces.IWindow Current { get; }
 
-        public IReadOnlyCollection<string> Handles => _driver.WindowHandles;
+        /// <summary>
+        /// Contains all windows handless
+        /// </summary>
+        public IReadOnlyCollection<string> Handles => this.driver.WindowHandles;
     }
 }

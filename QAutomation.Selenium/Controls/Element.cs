@@ -11,21 +11,19 @@
     {
         public WebDriver WebDriver;
 
-        private readonly IUnityContainer _container;
         private readonly ElementFinderService _service;
 
         public IWebElement WrappedElement { get; }
 
         internal ISearchContext Context => WrappedElement ?? Driver as ISearchContext;
 
-        public Element(WebDriver driver, IWebElement element, Core.By locator, IUnityContainer container)
+        public Element(WebDriver driver, IWebElement element, Core.Locator locator, IUnityContainer container)
         {
             WrappedElement = element;
-            Locator = locator;
-
-            _container = container;
-            _service = new ElementFinderService(_container);
             WebDriver = driver;
+
+            Locator = locator;
+            _service = new ElementFinderService(container);
         }
 
         public IWebDriver Driver => WebDriver.Driver;
@@ -38,7 +36,7 @@
 
         public State State => throw new NotImplementedException();
 
-        public Core.By Locator { get; set; }
+        public Core.Locator Locator { get; set; }
 
         public string GetAttribute(string attributeName) => WrappedElement.GetAttribute(attributeName);
         public string GetProperty(string propertyName) => WrappedElement.GetProperty(propertyName);

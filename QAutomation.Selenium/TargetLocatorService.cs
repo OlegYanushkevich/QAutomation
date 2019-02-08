@@ -2,39 +2,40 @@
 {
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
-    using QAutomation.Selenium.Controls;
 
+    /// <summary>
+    /// Service for switching between different entities
+    /// </summary>
     public class TargetLocatorService : ITargetLocatorService
     {
         private readonly WebDriver _driver;
 
         public TargetLocatorService(WebDriver driver)
         {
-            _driver = driver;
+            this._driver = driver;
         }
 
-        public IAlert Alert() => new Alert(_driver.Driver.SwitchTo().Alert());
-
+        public IAlert Alert() => new Alert(this._driver.Driver.SwitchTo().Alert());
 
         public IDriver DefaultContent()
         {
-            if (_driver.CurrentFrame != null)
+            if (this._driver.CurrentFrame != null)
             {
-                _driver.Driver.SwitchTo().DefaultContent();
-                _driver.CurrentFrame = null;
+                this._driver.Driver.SwitchTo().DefaultContent();
+                this._driver.CurrentFrame = null;
             }
 
-            return _driver;
+            return this._driver;
         }
 
-        public IDriver Frame(Core.By by) => _driver.Find<IFrameElement>(by).Switch();
+        public IDriver Frame(Core.Locator by) => this._driver.Find<IFrameElement>(by).Switch();
 
         public IDriver Frame(IFrameElement frame) => frame.Switch();
 
         public IWindow Window(string handle)
         {
-            _driver.Driver.SwitchTo().Window(handle);
-            return _driver.Manage().Windows().Current;
+            this._driver.Driver.SwitchTo().Window(handle);
+            return this._driver.Manage().Windows().Current;
         }
     }
 }

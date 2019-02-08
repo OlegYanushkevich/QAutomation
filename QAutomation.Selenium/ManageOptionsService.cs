@@ -1,17 +1,16 @@
 ﻿namespace QAutomation.Selenium
 {
-    using OpenQA.Selenium;
     using QAutomation.Core.Interfaces;
 
     public class ManageOptionsService : IManageOptions
     {
-        private readonly CookiesService _cookieService;
-        private readonly WindowsService _windowsService;
+        private readonly ICookiesService _cookieService;
+        private readonly IWindowsService _windowsService;
 
-        public ManageOptionsService(IWebDriver driver)
+        public ManageOptionsService(ICookiesService cookiesService, IWindowsService windowsService)
         {
-            _cookieService = new CookiesService(driver.Manage().Cookies);
-            _windowsService = new WindowsService(driver);
+            _cookieService = cookiesService;
+            _windowsService = windowsService;
         }
 
         public ICookiesService Cookies() => _cookieService;

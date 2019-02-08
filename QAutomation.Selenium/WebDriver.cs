@@ -1,68 +1,78 @@
 ﻿namespace QAutomation.Selenium
 {
+    using System.Collections.Generic;
     using global::Unity;
     using global::Unity.Resolution;
     using OpenQA.Selenium;
-    using QAutomation.Core;
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
     using QAutomation.Selenium.Configs;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Unity;
 
     public partial class WebDriver : IDriver
     {
+        private readonly ElementFinderService finderService;
+
+        private readonly IUnityContainer container;
+
+        private readonly WebDriverConfig config;
+
+        private IWebDriver driver;
+
+        private IManageOptions manageOptions;
+
+        private ITargetLocatorService targetLocator;
+
+        private INavigationService navigation;
+
+        private IWaitingService waiting;
+
         internal IFrameElement CurrentFrame { get; set; }
 
-        public ElementFinderService _finderService;
+        public IWebDriver Driver => driver ?? (driver = config.CreateDriver());
 
-        private IWebDriver _driver;
-        public IWebDriver Driver
-        {
-            get
-            {
-                if (_driver == null)
-                    _driver = _config.CreateDriver();
-
-                return _driver;
-            }
-        }
-
-        private readonly IUnityContainer _container;
-
-        private WebDriverConfig _config;
-        public IDriverConfig Config => _config;
+        public IDriverConfig Config => config;
 
         public WebDriver(WebDriverConfig config, IUnityContainer container)
         {
-            _container = container;
-            _config = config;
+            this.container = container;
+            this.config = config;
 
-            _finderService = new ElementFinderService(_container);
+            this.finderService = new ElementFinderService(this.container);
         }
 
-     
-        public IManageOptions Manage() => new ManageOptionsService(Driver);
-        public INavigationService Navigate() => new NavigationService(Driver.Navigate());
+        public IManageOptions Manage()
+        {
+            if (manageOptions == null)
+            {
+                var cookieService = this.container.Resolve<ICookiesService>(new ParameterOverride("cookieJar", Driver.Manage().Cookies));
+                var windowsService = this.container.Resolve<IWindowsService>(new ParameterOverride("driver", Driver));
 
+                this.manageOptions = this.container.Resolve<IManageOptions>(new ResolverOverride[]
+                {
+                    new ParameterOverride("cookieService", cookieService),
+                    new ParameterOverride("windowsSerivce", windowsService)
+                });
+            }
+            return this.manageOptions;
+        }
 
-        public ITargetLocatorService SwitchTo() => new TargetLocatorService(this);
+        public INavigationService Navigate()
+        {
+            return this.navigation ??
+                  (this.navigation = this.container.Resolve<INavigationService>(new ResolverOverride[] { new ParameterOverride("navigation", Driver.Navigate()) }));
+        }
+
+        public ITargetLocatorService SwitchTo()
+        {
+            return this.targetLocator ??
+                  (this.targetLocator = this.container.Resolve<ITargetLocatorService>(new ResolverOverride[] { new ParameterOverride("driver", this) }));
+        }
 
         public IWaitingService Wait()
-        {
-            throw new NotImplementedException();
-        }
+            => this.waiting ?? (this.waiting = this.container.Resolve<IWaitingService>(new ResolverOverride[] { new ParameterOverride("driver", this) }));
 
-        public TElement Find<TElement>(Core.By by) where TElement : IElement
-        {
-            return _finderService.Find<TElement>(this, by);
-        }
+        public TElement Find<TElement>(Core.Locator locator) where TElement : IElement => this.finderService.Find<TElement>(this, locator);
 
-        public IEnumerable<TElement> FindAll<TElement>(Core.By by) where TElement : IElement
-        {
-            return _finderService.FindAll<TElement>(this, by);
-        }
+        public IEnumerable<TElement> FindAll<TElement>(Core.Locator locator) where TElement : IElement => this.finderService.FindAll<TElement>(this, locator);
     }
 }

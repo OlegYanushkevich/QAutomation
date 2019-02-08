@@ -6,6 +6,9 @@
 
     public enum LocatorType
     {
-        Xpath
+        Xpath,
+        CssSeletor,
+        Name,
+        Id
     }
 }

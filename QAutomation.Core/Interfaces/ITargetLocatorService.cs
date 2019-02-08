@@ -7,7 +7,7 @@
         IAlert Alert();
         IWindow Window(string handle);
         IDriver DefaultContent();
-        IDriver Frame(By by);
+        IDriver Frame(Locator by);
         IDriver Frame(IFrameElement frame);
     }
 }

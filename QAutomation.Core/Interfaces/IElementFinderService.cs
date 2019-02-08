@@ -5,7 +5,7 @@
 
     public interface IElementFinderService
     {
-        TElement Find<TElement>(By by) where TElement : IElement;
-        IEnumerable<TElement> FindAll<TElement>(By by) where TElement : IElement;
+        TElement Find<TElement>(Locator by) where TElement : IElement;
+        IEnumerable<TElement> FindAll<TElement>(Locator by) where TElement : IElement;
     }
 }
