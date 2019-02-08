@@ -5,20 +5,20 @@
 
     public class NavigationService : INavigationService
     {
-        private readonly INavigation _navigation;
+        private readonly INavigation navigation;
 
         public NavigationService(INavigation navigation)
         {
-            _navigation = navigation;
+            this.navigation = navigation;
         }
 
-        public void Back() => _navigation.Back();
-        public void Forward() => _navigation.Forward();
-        public void Refresh() => _navigation.Refresh();
+        public void Back() => this.navigation.Back();
+        public void Forward() => this.navigation.Forward();
+        public void Refresh() => this.navigation.Refresh();
 
         public INavigationService Url(string url)
         {
-            _navigation.GoToUrl(url);
+            this.navigation.GoToUrl(url);
             return this;
         }
     }

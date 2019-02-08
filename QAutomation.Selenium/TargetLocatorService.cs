@@ -8,34 +8,34 @@
     /// </summary>
     public class TargetLocatorService : ITargetLocatorService
     {
-        private readonly WebDriver _driver;
+        private readonly WebDriver webDriver;
 
-        public TargetLocatorService(WebDriver driver)
+        public TargetLocatorService(WebDriver webDriver)
         {
-            this._driver = driver;
+            this.webDriver = webDriver;
         }
 
-        public IAlert Alert() => new Alert(this._driver.Driver.SwitchTo().Alert());
+        public IAlert Alert() => new Alert(this.webDriver.Driver.SwitchTo().Alert());
 
         public IDriver DefaultContent()
         {
-            if (this._driver.CurrentFrame != null)
+            if (this.webDriver.CurrentFrame != null)
             {
-                this._driver.Driver.SwitchTo().DefaultContent();
-                this._driver.CurrentFrame = null;
+                this.webDriver.Driver.SwitchTo().DefaultContent();
+                this.webDriver.CurrentFrame = null;
             }
 
-            return this._driver;
+            return this.webDriver;
         }
 
-        public IDriver Frame(Core.Locator by) => this._driver.Find<IFrameElement>(by).Switch();
+        public IDriver Frame(Core.Locator by) => this.webDriver.Find<IFrameElement>(by).Switch();
 
         public IDriver Frame(IFrameElement frame) => frame.Switch();
 
         public IWindow Window(string handle)
         {
-            this._driver.Driver.SwitchTo().Window(handle);
-            return this._driver.Manage().Windows().Current;
+            this.webDriver.Driver.SwitchTo().Window(handle);
+            return this.webDriver.Manage().Windows().Current;
         }
     }
 }

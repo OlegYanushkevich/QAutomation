@@ -74,5 +74,7 @@
         public TElement Find<TElement>(Core.Locator locator) where TElement : IElement => this.finderService.Find<TElement>(this, locator);
 
         public IEnumerable<TElement> FindAll<TElement>(Core.Locator locator) where TElement : IElement => this.finderService.FindAll<TElement>(this, locator);
+
+        public void Quit() => Driver.Close();
     }
 }

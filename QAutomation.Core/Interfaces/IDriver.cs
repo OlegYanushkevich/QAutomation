@@ -9,5 +9,7 @@
         INavigationService Navigate();
 
         IWaitingService Wait();
+
+        void Quit();
     }
 }

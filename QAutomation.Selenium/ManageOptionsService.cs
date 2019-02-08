@@ -4,16 +4,16 @@
 
     public class ManageOptionsService : IManageOptions
     {
-        private readonly ICookiesService _cookieService;
-        private readonly IWindowsService _windowsService;
+        private readonly ICookiesService cookiesService;
+        private readonly IWindowsService windowsService;
 
         public ManageOptionsService(ICookiesService cookiesService, IWindowsService windowsService)
         {
-            _cookieService = cookiesService;
-            _windowsService = windowsService;
+            this.cookiesService = cookiesService;
+            this.windowsService = windowsService;
         }
 
-        public ICookiesService Cookies() => _cookieService;
-        public IWindowsService Windows() => _windowsService;
+        public ICookiesService Cookies() => this.cookiesService;
+        public IWindowsService Windows() => this.windowsService;
     }
 }

@@ -11,14 +11,14 @@
             this.alert = alert;
         }
 
-        public string Text => alert.Text;
+        public string Text => this.alert.Text;
 
-        public void Accept() => alert.Accept();
+        public void Accept() => this.alert.Accept();
 
-        public void Dismiss() => alert.Dismiss();
+        public void Dismiss() => this.alert.Dismiss();
 
-        public void SendKeys(string keysToSend) => alert.SendKeys(keysToSend);
+        public void SendKeys(string keysToSend) => this.alert.SendKeys(keysToSend);
 
-        public void SetAuthenticationCredentials(string userName, string password) => alert.SetAuthenticationCredentials(userName, password);
+        public void SetAuthenticationCredentials(string userName, string password) => this.alert.SetAuthenticationCredentials(userName, password);
     }
 }

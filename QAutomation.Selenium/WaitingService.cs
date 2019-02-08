@@ -7,11 +7,11 @@
 
     public class WaitingService : IWaitingService
     {
-        private readonly IDriver _driver;
+        private readonly IDriver driver;
 
         public WaitingService(IDriver driver)
         {
-            _driver = driver;
+            this.driver = driver;
         }
 
         public T Until<T>(Func<IDriver, T> condition, double timeout = -1, params Type[] exceptionTypes) => this.Until(condition, timeout, 1, exceptionTypes);
@@ -32,7 +32,7 @@
         }
 
         public T Until<T>(Func<IDriver, T> condition, double timeout, double pollingInterval, params Type[] exceptionTypes)
-            => this.GetWait(timeout, pollingInterval, exceptionTypes).Until(d => condition(d));
+            => this.ConfigurateWaiter(timeout, pollingInterval, exceptionTypes).Until(d => condition(d));
 
         public bool Try<T>(Func<IDriver, T> condition, double timeout = -1, params Type[] exceptionTypes)
         {
@@ -60,9 +60,9 @@
             }
         }
 
-        private DefaultWait<IDriver> GetWait(double timeout, double pollingInterval, params Type[] exceptionTypes)
+        private DefaultWait<IDriver> ConfigurateWaiter(double timeout, double pollingInterval, params Type[] exceptionTypes)
         {
-            var waiter = new DefaultWait<IDriver>(this._driver)
+            var waiter = new DefaultWait<IDriver>(this.driver)
             {
                 Timeout = TimeSpan.FromSeconds(timeout),
                 PollingInterval = TimeSpan.FromSeconds(pollingInterval),
