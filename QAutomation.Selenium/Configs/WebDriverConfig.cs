@@ -6,7 +6,7 @@
 
     public abstract class WebDriverConfig : IDriverConfig
     {
-        public int ProcessID { get; set; }
+        public int ProcessId { get; set; }
 
         public virtual string Version { get; set; } = "any";
 
@@ -17,8 +17,6 @@
         public TimeSpan PageLoadTimeout { get; set; } = TimeSpan.FromSeconds(60);
 
         public TimeSpan AsyncJavaScriptTimeout { get; set; } = TimeSpan.FromSeconds(60);
-
-        public TimeSpan WaitTimeout { get; set; } = TimeSpan.FromSeconds(60);
 
         public TimeSpan PollingInterval { get; set; } = TimeSpan.FromSeconds(2);
 
@@ -68,7 +66,6 @@
                 }
                 return proxy;
             }
-
             return null;
         }
     }

@@ -17,7 +17,7 @@
 
         internal ISearchContext Context => WrappedElement ?? Driver as ISearchContext;
 
-        public Element(WebDriver driver, IWebElement element, Core.Locator locator, IUnityContainer container)
+        public Element(WebDriver driver, IWebElement element, Locator locator, IUnityContainer container)
         {
             WrappedElement = element;
             WebDriver = driver;
@@ -34,9 +34,27 @@
 
         public Size Size => new Size(WrappedElement.Size.Width, WrappedElement.Size.Width);
 
-        public State State => throw new NotImplementedException();
+        public State State
+        {
+            get
+            {
+                var accomulator = State.None;
 
-        public Core.Locator Locator { get; set; }
+                if (WrappedElement.Displayed)
+                    accomulator |= State.Present;
+                else
+                    accomulator |= State.Absent;
+
+                if (WrappedElement.Enabled)
+                    accomulator |= State.Enabled;
+                else
+                    accomulator |= State.Disabled;
+
+                return accomulator;
+            }
+        }
+
+        public Locator Locator { get; set; }
 
         public string GetAttribute(string attributeName) => WrappedElement.GetAttribute(attributeName);
         public string GetProperty(string propertyName) => WrappedElement.GetProperty(propertyName);

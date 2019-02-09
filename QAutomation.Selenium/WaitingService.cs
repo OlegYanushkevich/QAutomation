@@ -64,8 +64,8 @@
         {
             var waiter = new DefaultWait<IDriver>(this.driver)
             {
-                Timeout = TimeSpan.FromSeconds(timeout),
-                PollingInterval = TimeSpan.FromSeconds(pollingInterval),
+                Timeout = timeout >= 0 ? TimeSpan.FromSeconds(timeout) : driver.Config.SearchTimeout,
+                PollingInterval = pollingInterval >= 0 ? TimeSpan.FromSeconds(pollingInterval) : driver.Config.PollingInterval
             };
 
             waiter.IgnoreExceptionTypes(exceptionTypes);

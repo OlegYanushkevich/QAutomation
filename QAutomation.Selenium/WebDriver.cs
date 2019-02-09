@@ -4,10 +4,12 @@
     using global::Unity;
     using global::Unity.Resolution;
     using OpenQA.Selenium;
+    using QAutomation.AspectInjector;
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
     using QAutomation.Selenium.Configs;
 
+    [Logged]
     public partial class WebDriver : IDriver
     {
         private readonly ElementFinderService finderService;

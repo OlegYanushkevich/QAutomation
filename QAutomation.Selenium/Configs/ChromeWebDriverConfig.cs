@@ -50,7 +50,7 @@ namespace QAutomation.Selenium.Configs
             driverService.HideCommandPromptWindow = true;
 
             var driver = new ChromeDriver(driverService, this.Options, this.CommandTimeout);
-            this.ProcessID = driverService.ProcessId;
+            this.ProcessId = driverService.ProcessId;
 
             return driver;
         }

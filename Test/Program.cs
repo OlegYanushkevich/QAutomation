@@ -1,6 +1,9 @@
 ﻿namespace Test
 {
-    using System;
+    using NLog;
+    using NLog.Config;
+    using NLog.Targets;
+    using QAutomation.AspectInjector;
     using QAutomation.Core;
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
@@ -9,14 +12,17 @@
     using QAutomation.Selenium.Controls;
     using Unity;
 
-    internal static class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
-            if (args == null)
-            {
-                throw new ArgumentNullException(nameof(args));
-            }
+            var cfg = new LoggingConfiguration();
+            var target = new ConsoleTarget("logconsole");
+
+            cfg.AddTarget(target);
+            cfg.AddRuleForAllLevels(target);
+
+            LogManager.Configuration = cfg;
 
             var container = new UnityContainer();
             var config = new ChromeWebDriverConfig();
@@ -35,15 +41,11 @@
 
             var driver = container.Resolve<IDriver>();
 
-            driver.Navigate().Url("https://products.office.com/en-us/try");
-            var tl = driver.SwitchTo();
-            var t1l = driver.SwitchTo();
-
-            Console.WriteLine(t1l == tl);
+            driver.Navigate().Url("https://google.com");
 
             var elements = driver.FindAll<IElement>(Locator.CssSelector("[id^='lnk-']"));
-            var content = System.Linq.Enumerable.ElementAt(elements, 0).Content;
-            //driver.ExecuteJavaScript("arguments[0].click()", new object[] { driver.Find<IElement>(new QAutomation.Core.By(LocatorType.Xpath, ".//*[@class='region__cityname']"))});
+
+            driver.Quit();
         }
     }
 }

@@ -16,30 +16,29 @@
             this.container = container;
         }
 
-        public TElement Find<TElement>(WebDriver driver, Core.Locator by)
+        public TElement Find<TElement>(WebDriver driver, Core.Locator locator)
             where TElement : IElement
         {
-            var element = driver.Driver.FindElement(by.Cast());
-            return this.Resolve<TElement>(driver, element, by);
+            var element = driver.Driver.FindElement(locator.Cast());
+            return this.Resolve<TElement>(driver, element, locator);
         }
 
-        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.Locator by)
+        public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.Locator locator)
             where TElement : IElement
         {
-            var elements = driver.Driver.FindElements(by.Cast());
-
+            var elements = driver.Driver.FindElements(locator.Cast());
             var list = new List<TElement>();
 
             for (int i = 0; i < elements.Count; i++)
             {
                 IWebElement element = elements[i];
-                list.Add(item: this.Resolve<TElement>(driver, element, by));
+                list.Add(item: this.Resolve<TElement>(driver, element, locator));
             }
 
             return list;
         }
 
-        public IEnumerable<TElement> FindAll<TElement>(Element parent, Core.Locator by)
+        public IEnumerable<TElement> FindAll<TElement>(Element parent, Core.Locator locator)
             where TElement : IElement
         {
             ISearchContext context = null;
@@ -54,20 +53,20 @@
                 context = parent.Context;
             }
 
-            var elements = context.FindElements(by.Cast());
+            var elements = context.FindElements(locator.Cast());
 
             var list = new List<TElement>();
 
             for (int i = 0; i < elements.Count; i++)
             {
                 IWebElement element = elements[i];
-                list.Add(item: this.Resolve<TElement>(parent.WebDriver, element, by));
+                list.Add(item: this.Resolve<TElement>(parent.WebDriver, element, locator));
             }
 
             return list;
         }
 
-        public TElement Find<TElement>(Element parent, Core.Locator by)
+        public TElement Find<TElement>(Element parent, Core.Locator locator)
             where TElement : IElement
         {
             ISearchContext context = null;
@@ -82,17 +81,17 @@
                 context = parent.Context;
             }
 
-            var element = context.FindElement(by.Cast());
-            return this.Resolve<TElement>(parent.WebDriver, element, by);
+            var element = context.FindElement(locator.Cast());
+            return this.Resolve<TElement>(parent.WebDriver, element, locator);
         }
 
-        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.Locator by) where TElement : IElement
+        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.Locator locator) where TElement : IElement
         {
             return this.container.Resolve<TElement>(new ResolverOverride[]
             {
                  new ParameterOverride("driver", driver),
                  new ParameterOverride("element", current),
-                 new ParameterOverride("locator", by),
+                 new ParameterOverride("locator", locator),
                  new ParameterOverride("container", this.container)
             });
         }
