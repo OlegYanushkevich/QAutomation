@@ -12,6 +12,8 @@
 
         State State { get; }
 
+        void Click();
+
         string GetAttribute(string attributeName);
 
         string GetProperty(string propertyName);

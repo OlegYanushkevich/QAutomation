@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAutomation.Selenium", "QAu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{020FC7EC-8B2D-4460-B65A-B1B7F4774B94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QAutomation.AspectInjector", "QAutomation.AspectInjector\QAutomation.AspectInjector.csproj", "{7C19D601-1A99-4503-A801-E353BBB07E6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAutomation.AspectInjector", "QAutomation.AspectInjector\QAutomation.AspectInjector.csproj", "{7C19D601-1A99-4503-A801-E353BBB07E6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QAutomation.Logging.Abstract", "QAutomation.Logging.Abstract\QAutomation.Logging.Abstract.csproj", "{0FBE8E11-33F8-48FF-BE07-8990E7324551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAutomation.Logging.Abstract", "QAutomation.Logging.Abstract\QAutomation.Logging.Abstract.csproj", "{0FBE8E11-33F8-48FF-BE07-8990E7324551}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

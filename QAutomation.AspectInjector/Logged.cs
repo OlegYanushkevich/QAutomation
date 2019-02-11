@@ -31,12 +31,10 @@
         {
             var executorType = target.GetType().GetTypeInfo().FullName;
 
-            var attributes = target.GetType()
+            var descriptionAttribute = target.GetType()
                                    .GetTypeInfo()
                                    .GetMethod(name)
-                                   .GetCustomAttributes();
-
-            var description = (DescriptionAttribute)attributes.FirstOrDefault(atr => atr is DescriptionAttribute);
+                                   .GetCustomAttribute<DescriptionAttribute>();
 
             var logger = NLog.LogManager.GetLogger(executorType);
             var sw = Stopwatch.StartNew();
@@ -44,9 +42,9 @@
             logger?.Trace($"Executing the '{name}' method.");
             try
             {
-                if (description != null)
+                if (descriptionAttribute != null)
                 {
-                    logger?.Log(map[description.Level], description.Description);
+                    logger?.Log(map[descriptionAttribute.Level], descriptionAttribute.Description);
                 }
 
                 return method(arguments);

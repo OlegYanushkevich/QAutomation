@@ -59,5 +59,7 @@
         public string GetAttribute(string attributeName) => WrappedElement.GetAttribute(attributeName);
         public string GetProperty(string propertyName) => WrappedElement.GetProperty(propertyName);
         public string GetCssValue(string cssStyleName) => WrappedElement.GetCssValue(cssStyleName);
+
+        public void Click() => WrappedElement.Click();
     }
 }
