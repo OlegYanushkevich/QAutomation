@@ -28,6 +28,7 @@
             var config = new ChromeWebDriverConfig();
 
             container.RegisterType<IElement, Element>();
+            container.RegisterType<ITextElement, TextElement>();
             container.RegisterType<IFrameElement, FrameElement>();
             container.RegisterType<INavigationService, NavigationService>();
             container.RegisterType<IManageOptions, ManageOptionsService>();
@@ -43,7 +44,12 @@
 
             driver.Navigate().Url("https://google.com");
 
-            var elements = driver.FindAll<IElement>(Locator.CssSelector("[id^='lnk-']"));
+            var input = driver.Find<ITextElement>(Locator.CssSelector("[name='q']"));
+            input.SendKeys("Oleg Yanushkevich");
+
+            var findBtn = driver.Find<IElement>(Locator.XPath("(.//input[@name='btnK'])[2]"));
+
+            findBtn.Click();
 
             driver.Quit();
         }

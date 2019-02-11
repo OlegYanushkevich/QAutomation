@@ -7,7 +7,7 @@
     using global::Unity;
     using global::Unity.Resolution;
 
-    internal class ElementFinderService
+    public class ElementFinderService
     {
         private readonly IUnityContainer container;
 

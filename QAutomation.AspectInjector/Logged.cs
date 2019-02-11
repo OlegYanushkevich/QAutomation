@@ -3,14 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Linq;
     using System.Reflection;
     using global::AspectInjector.Broker;
     using QAutomation.Logging.Abstract;
 
     [Aspect(Scope.Global)]
     [Injection(typeof(LoggedAttribute))]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method, AllowMultiple = false)]
     public class LoggedAttribute : Attribute
     {
         private static readonly Dictionary<LogLevel, NLog.LogLevel> map = new Dictionary<LogLevel, NLog.LogLevel>
@@ -23,18 +22,20 @@
         };
 
         [Advice(Kind.Around, Targets = Target.Method)]
-        public object HandleMethod(
+        public object HandleMethod
+        (
             [Argument(Source.Name)] string name,
             [Argument(Source.Arguments)] object[] arguments,
             [Argument(Source.Instance)] object target,
-            [Argument(Source.Target)] Func<object[], object> method)
+            [Argument(Source.Target)] Func<object[], object> method
+        )
         {
             var executorType = target.GetType().GetTypeInfo().FullName;
 
             var descriptionAttribute = target.GetType()
-                                   .GetTypeInfo()
-                                   .GetMethod(name)
-                                   .GetCustomAttribute<DescriptionAttribute>();
+                                             .GetTypeInfo()
+                                             .GetMethod(name)
+                                             .GetCustomAttribute<DescriptionAttribute>();
 
             var logger = NLog.LogManager.GetLogger(executorType);
             var sw = Stopwatch.StartNew();
@@ -46,7 +47,6 @@
                 {
                     logger?.Log(map[descriptionAttribute.Level], descriptionAttribute.Description);
                 }
-
                 return method(arguments);
             }
             catch (Exception ex)
