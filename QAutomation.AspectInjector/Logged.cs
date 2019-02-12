@@ -30,23 +30,27 @@
             [Argument(Source.Target)] Func<object[], object> method
         )
         {
-            var executorType = target.GetType().GetTypeInfo().FullName;
+            var executorTypeInfo = target.GetType().GetTypeInfo();
 
             var descriptionAttribute = target.GetType()
                                              .GetTypeInfo()
                                              .GetMethod(name)
                                              .GetCustomAttribute<DescriptionAttribute>();
 
-            var logger = NLog.LogManager.GetLogger(executorType);
+            var logger = NLog.LogManager.GetLogger(executorTypeInfo.FullName);
             var sw = Stopwatch.StartNew();
 
-            logger?.Trace($"Executing the '{name}' method.");
+            logger?.Trace($"Executing the '{executorTypeInfo.Name}.{name}' method.");
             try
             {
                 if (descriptionAttribute != null)
                 {
                     logger?.Log(map[descriptionAttribute.Level], descriptionAttribute.Description);
                 }
+
+                var result = method(arguments);
+                //logger?.Trace("'{@executor}' method returned {@result}", new[] { $"{executorTypeInfo.Name}.{name}", result });
+
                 return method(arguments);
             }
             catch (Exception ex)
@@ -57,7 +61,7 @@
             finally
             {
                 sw.Stop();
-                logger?.Trace($"The method '{name}' worked in {sw.Elapsed.TotalSeconds} second(s).");
+                logger?.Trace($"The method '{executorTypeInfo.Name}.{name}' worked in {sw.Elapsed.TotalSeconds} second(s).");
             }
         }
     }

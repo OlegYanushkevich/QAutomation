@@ -10,6 +10,6 @@
 
         public T ExecuteJavaScript<T>(string script) => this.ExecuteJavaScript<T>(script, (object[])null);
 
-        public T ExecuteJavaScript<T>(string script, object[] args) => (T)((OpenQA.Selenium.IJavaScriptExecutor)Driver).ExecuteAsyncScript(script, args);
+        public T ExecuteJavaScript<T>(string script, object[] args) => (T)((OpenQA.Selenium.IJavaScriptExecutor)WrappedDriver).ExecuteAsyncScript(script, args);
     }
 }

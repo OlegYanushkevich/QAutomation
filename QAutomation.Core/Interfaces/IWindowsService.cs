@@ -6,5 +6,9 @@
     {
         IWindow Current { get; }
         IReadOnlyCollection<string> Handles { get; }
+
+        IWindow CloseCurrentWindow();
+        IWindow SwitchToLastWindow();
+        IWindow SwitchToWindow(string handle);
     }
 }

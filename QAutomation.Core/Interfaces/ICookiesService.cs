@@ -4,7 +4,7 @@
 
     public interface ICookiesService
     {
-        IReadOnlyCollection<Cookie> Cookies { get; }
+        IReadOnlyCollection<Cookie> GetAll();
 
         ICookiesService Add(Cookie cookie);
         Cookie GetByName(string cookieName);

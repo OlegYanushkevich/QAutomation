@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspectInjector" Version="2.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QAutomation.AspectInjector\QAutomation.AspectInjector.csproj" />
     <ProjectReference Include="..\QAutomation.Selenium\QAutomation.Selenium.csproj" />
   </ItemGroup>

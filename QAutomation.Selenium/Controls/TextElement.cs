@@ -1,12 +1,9 @@
 ﻿namespace QAutomation.Selenium.Controls
 {
+    using Unity;
     using OpenQA.Selenium;
     using QAutomation.Core;
     using QAutomation.Core.Interfaces.Controls;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Unity;
 
     public class TextElement : Element, ITextElement
     {
@@ -14,6 +11,6 @@
             : base(driver, element, locator, container) { }
        
 
-        public void SendKeys(string text) => WrappedElement.SendKeys(text);
+        public void SendKeys(string text) => this.WrappedElement.SendKeys(text);
     }
 }

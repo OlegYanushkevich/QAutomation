@@ -19,14 +19,14 @@
         public TElement Find<TElement>(WebDriver driver, Core.Locator locator)
             where TElement : IElement
         {
-            var element = driver.Driver.FindElement(locator.Cast());
+            var element = driver.WrappedDriver.FindElement(locator.Cast());
             return this.Resolve<TElement>(driver, element, locator);
         }
 
         public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.Locator locator)
             where TElement : IElement
         {
-            var elements = driver.Driver.FindElements(locator.Cast());
+            var elements = driver.WrappedDriver.FindElements(locator.Cast());
             var list = new List<TElement>();
 
             for (int i = 0; i < elements.Count; i++)

@@ -19,6 +19,7 @@
 
         public void SendKeys(string keysToSend) => this.alert.SendKeys(keysToSend);
 
-        public void SetAuthenticationCredentials(string userName, string password) => this.alert.SetAuthenticationCredentials(userName, password);
+        public void SetAuthenticationCredentials(string userName, string password) 
+            => this.alert.SetAuthenticationCredentials(userName, password);
     }
 }

@@ -7,11 +7,11 @@
     using System;
 
     [Logged]
-    public class LoggedtargetLocatorService : ITargetLocatorService
+    public class LoggedTargetLocatorService : ITargetLocatorService
     {
         private readonly ITargetLocatorService decoratedTargetLocatorService;
 
-        public LoggedtargetLocatorService(ITargetLocatorService targetLocatorService)
+        public LoggedTargetLocatorService(ITargetLocatorService targetLocatorService)
         {
             decoratedTargetLocatorService = targetLocatorService ?? throw new NullReferenceException(nameof(targetLocatorService));
         }

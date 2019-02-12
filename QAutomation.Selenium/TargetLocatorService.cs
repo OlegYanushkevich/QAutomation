@@ -2,40 +2,45 @@
 {
     using QAutomation.Core.Interfaces;
     using QAutomation.Core.Interfaces.Controls;
+    using Unity;
+    using Unity.Resolution;
 
     /// <summary>
     /// Service for switching between different entities
     /// </summary>
     public class TargetLocatorService : ITargetLocatorService
     {
-        private readonly WebDriver webDriver;
+        private readonly WebDriver driver;
 
-        public TargetLocatorService(WebDriver webDriver)
+        private IAlert alert;
+
+        public TargetLocatorService(WebDriver driver)
         {
-            this.webDriver = webDriver;
+            this.driver = driver;
         }
 
-        public IAlert Alert() => new Alert(this.webDriver.Driver.SwitchTo().Alert());
+        public IAlert Alert() =>
+            alert ?? (alert = driver.Container.Resolve<IAlert>(new ParameterOverride(nameof(alert), driver.WrappedDriver.SwitchTo().Alert())));
 
         public IDriver DefaultContent()
         {
-            if (this.webDriver.CurrentFrame != null)
+            if (this.driver.CurrentFrame != null)
             {
-                this.webDriver.Driver.SwitchTo().DefaultContent();
-                this.webDriver.CurrentFrame = null;
+                this.driver.WrappedDriver.SwitchTo().DefaultContent();
+                this.driver.CurrentFrame = null;
             }
 
-            return this.webDriver;
+            return this.driver;
         }
 
-        public IDriver Frame(Core.Locator by) => this.webDriver.Find<IFrameElement>(by).Switch();
+        public IDriver Frame(Core.Locator by) => this.driver.Find<IFrameElement>(by).Switch();
 
         public IDriver Frame(IFrameElement frame) => frame.Switch();
 
         public IWindow Window(string handle)
         {
-            this.webDriver.Driver.SwitchTo().Window(handle);
-            return this.webDriver.Manage().Windows().Current;
+            this.driver.WrappedDriver.SwitchTo().Window(handle);
+            return this.driver.Manage().Windows().Current;
         }
     }
 }

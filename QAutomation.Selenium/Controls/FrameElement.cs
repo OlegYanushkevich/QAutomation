@@ -14,7 +14,7 @@
         {
             if (this.WebDriver.CurrentFrame != this)
             {
-                this.WebDriver.Driver.SwitchTo().Frame(this.WrappedElement);
+                this.WebDriver.WrappedDriver.SwitchTo().Frame(this.WrappedElement);
                 this.WebDriver.CurrentFrame = this;
             }
 

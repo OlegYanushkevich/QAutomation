@@ -14,8 +14,14 @@
             this.cookieJar = cookieJar;
         }
 
-        public IReadOnlyCollection<Core.Cookie> Cookies =>
+        public IReadOnlyCollection<Core.Cookie> GetAll() =>
             this.cookieJar.AllCookies.Select(c => new Core.Cookie(c.Name, c.Value, c.Path, c.Domain, c.Expiry)).ToList().AsReadOnly();
+
+        public Core.Cookie GetByName(string cookieName)
+        {
+            var cookie = this.cookieJar.GetCookieNamed(cookieName);
+            return new Core.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Expiry);
+        }
 
         public ICookiesService Add(Core.Cookie cookie)
         {
@@ -39,12 +45,6 @@
         {
             this.cookieJar.DeleteCookieNamed(cookieName);
             return this;
-        }
-
-        public Core.Cookie GetByName(string cookieName)
-        {
-            var cookie = this.cookieJar.GetCookieNamed(cookieName);
-            return new Core.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Expiry);
         }
     }
 }

@@ -7,22 +7,22 @@
     [Logged]
     public class LoggedAlert : IAlert
     {
-        private readonly IAlert _decoratedAlert;
+        private readonly IAlert decoratedAlert;
 
-        public LoggedAlert(IAlert alert)
+        public LoggedAlert(IAlert decoratedAlert)
         {
-            _decoratedAlert = alert ?? throw new NullReferenceException(nameof(alert));
+            this.decoratedAlert = decoratedAlert ?? throw new NullReferenceException(nameof(decoratedAlert));
         }
 
-        public string Text => _decoratedAlert.Text;
+        public string Text => this.decoratedAlert.Text;
 
-        public void Accept() => _decoratedAlert.Accept();
+        public void Accept() => this.decoratedAlert.Accept();
 
-        public void Dismiss() => _decoratedAlert.Dismiss();
+        public void Dismiss() => this.decoratedAlert.Dismiss();
 
-        public void SendKeys(string keysToSend) => _decoratedAlert.SendKeys(keysToSend);
+        public void SendKeys(string keysToSend) => this.decoratedAlert.SendKeys(keysToSend);
 
         public void SetAuthenticationCredentials(string userName, string password) 
-            => _decoratedAlert.SetAuthenticationCredentials(userName, password);
+            => this.decoratedAlert.SetAuthenticationCredentials(userName, password);
     }
 }

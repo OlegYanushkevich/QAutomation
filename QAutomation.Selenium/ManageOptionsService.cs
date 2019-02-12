@@ -1,6 +1,7 @@
 ﻿namespace QAutomation.Selenium
 {
     using QAutomation.Core.Interfaces;
+    using System;
 
     public class ManageOptionsService : IManageOptions
     {
@@ -9,8 +10,8 @@
 
         public ManageOptionsService(ICookiesService cookiesService, IWindowsService windowsService)
         {
-            this.cookiesService = cookiesService;
-            this.windowsService = windowsService;
+            this.cookiesService = cookiesService ?? throw new NullReferenceException(nameof(cookiesService));
+            this.windowsService = windowsService ?? throw new NullReferenceException(nameof(windowsService));
         }
 
         public ICookiesService Cookies() => this.cookiesService;

@@ -1,15 +1,21 @@
 ﻿namespace QAutomation.Selenium.Logged
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using QAutomation.AspectInjector;
     using QAutomation.Core.Interfaces;
 
     [Logged]
-    public class LoggedManageOptionsService : ManageOptionsService
+    public class LoggedManageOptionsService : IManageOptions
     {
-        public LoggedManageOptionsService(ICookiesService cookiesService, IWindowsService windowsService) 
-            : base(cookiesService, windowsService) { }
+        private readonly IManageOptions decoratedManageOptions;
+
+        public LoggedManageOptionsService(IManageOptions decoratedManageOptions)
+        {
+            this.decoratedManageOptions = decoratedManageOptions ?? throw new NullReferenceException(nameof(decoratedManageOptions));
+        }
+
+        public ICookiesService Cookies() => this.decoratedManageOptions.Cookies();
+
+        public IWindowsService Windows() => this.decoratedManageOptions.Windows();
     }
 }
