@@ -11,6 +11,7 @@
     using QAutomation.Selenium.Configs;
     using QAutomation.Selenium.Controls;
     using Unity;
+    using Unity.Injection;
 
     internal class Program
     {
@@ -32,7 +33,7 @@
             container.RegisterType<IFrameElement, FrameElement>();
             container.RegisterType<INavigationService, NavigationService>();
             container.RegisterType<IManageOptions, ManageOptionsService>();
-            container.RegisterType<ICookiesService, CookiesService>();
+
             container.RegisterType<IWindowsService, WindowsService>();
             container.RegisterType<ITargetLocatorService, TargetLocatorService>();
 
