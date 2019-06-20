@@ -10,8 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspectInjector" Version="2.0.6" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
-    <PackageReference Include="Unity.Container" Version="5.9.4" />
   </ItemGroup>
 
   <ItemGroup>

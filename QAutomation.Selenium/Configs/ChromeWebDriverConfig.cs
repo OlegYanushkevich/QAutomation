@@ -44,9 +44,11 @@ namespace QAutomation.Selenium.Configs
         {
             ChromeDriverService driverService;
             string path = Environment.GetEnvironmentVariable("webdriver.chrome.driver", EnvironmentVariableTarget.Machine);
-            driverService = path != null ? ChromeDriverService.CreateDefaultService(path) : ChromeDriverService.CreateDefaultService();
 
-            driverService.EnableVerboseLogging = true;
+            driverService = path != null
+                ? ChromeDriverService.CreateDefaultService(path)
+                : ChromeDriverService.CreateDefaultService();
+
             driverService.HideCommandPromptWindow = true;
 
             var driver = new ChromeDriver(driverService, this.Options, this.CommandTimeout);

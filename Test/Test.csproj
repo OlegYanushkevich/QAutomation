@@ -8,6 +8,8 @@
   <ItemGroup>
     <PackageReference Include="AspectInjector" Version="2.0.6" />
     <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NUnit" Version="3.11.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>

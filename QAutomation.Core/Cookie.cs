@@ -6,11 +6,13 @@
     {
         public Cookie(string name, string value, string path, string domain, DateTime? expireDate)
         {
-            this.Name = name;
-            this.Value = value;
-            this.Domain = domain;
-            this.Path = path;
-            this.Expiry = expireDate;
+            Name = name;
+            Value = value;
+
+            Domain = domain;
+            Path = path;
+
+            Expiry = expireDate;
         }
 
         public string Name { get; }
@@ -21,10 +23,7 @@
 
         public string Path { get; }
 
-        public virtual bool Secure
-        {
-            get { return false; }
-        }
+        public virtual bool Secure => false;
 
         public DateTime? Expiry { get; }
     }

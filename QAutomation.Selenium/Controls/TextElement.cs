@@ -1,16 +1,16 @@
 ﻿namespace QAutomation.Selenium.Controls
 {
-    using Unity;
+    using Autofac;
     using OpenQA.Selenium;
     using QAutomation.Core;
     using QAutomation.Core.Interfaces.Controls;
 
     public class TextElement : Element, ITextElement
     {
-        public TextElement(WebDriver driver, IWebElement element, Locator locator, IUnityContainer container)
-            : base(driver, element, locator, container) { }
-       
+        public TextElement(WebDriver driver, IWebElement element, Locator locator, ILifetimeScope scope)
+            : base(driver, element, locator, scope) { }
 
-        public void SendKeys(string text) => this.WrappedElement.SendKeys(text);
+
+        public void SendKeys(string text) => WrappedElement.SendKeys(text);
     }
 }

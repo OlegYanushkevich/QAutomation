@@ -1,26 +1,23 @@
 ﻿namespace QAutomation.Selenium
 {
-    using System.Collections.Generic;
+    using Autofac;
     using OpenQA.Selenium;
+    using QAutomation.Core;
     using QAutomation.Core.Interfaces.Controls;
     using QAutomation.Selenium.Controls;
-    using global::Unity;
-    using global::Unity.Resolution;
+    using System.Collections.Generic;
 
     public class ElementFinderService
     {
-        private readonly IUnityContainer container;
+        private readonly ILifetimeScope _scope;
 
-        public ElementFinderService(IUnityContainer container)
-        {
-            this.container = container;
-        }
+        public ElementFinderService(ILifetimeScope scope) => _scope = scope;
 
         public TElement Find<TElement>(WebDriver driver, Core.Locator locator)
             where TElement : IElement
         {
             var element = driver.WrappedDriver.FindElement(locator.Cast());
-            return this.Resolve<TElement>(driver, element, locator);
+            return Resolve<TElement>(driver, element, locator);
         }
 
         public IEnumerable<TElement> FindAll<TElement>(WebDriver driver, Core.Locator locator)
@@ -32,7 +29,7 @@
             for (int i = 0; i < elements.Count; i++)
             {
                 IWebElement element = elements[i];
-                list.Add(item: this.Resolve<TElement>(driver, element, locator));
+                list.Add(item: Resolve<TElement>(driver, element, locator));
             }
 
             return list;
@@ -41,7 +38,7 @@
         public IEnumerable<TElement> FindAll<TElement>(Element parent, Core.Locator locator)
             where TElement : IElement
         {
-            ISearchContext context = null;
+            ISearchContext context;
 
             if (parent is FrameElement frame)
             {
@@ -60,7 +57,7 @@
             for (int i = 0; i < elements.Count; i++)
             {
                 IWebElement element = elements[i];
-                list.Add(item: this.Resolve<TElement>(parent.WebDriver, element, locator));
+                list.Add(item: Resolve<TElement>(parent.WebDriver, element, locator));
             }
 
             return list;
@@ -69,7 +66,7 @@
         public TElement Find<TElement>(Element parent, Core.Locator locator)
             where TElement : IElement
         {
-            ISearchContext context = null;
+            ISearchContext context;
 
             if (parent is FrameElement frame)
             {
@@ -82,18 +79,15 @@
             }
 
             var element = context.FindElement(locator.Cast());
-            return this.Resolve<TElement>(parent.WebDriver, element, locator);
+            return Resolve<TElement>(parent.WebDriver, element, locator);
         }
 
-        private TElement Resolve<TElement>(WebDriver driver, IWebElement current, Core.Locator locator) where TElement : IElement
-        {
-            return this.container.Resolve<TElement>(new ResolverOverride[]
-            {
-                 new ParameterOverride("driver", driver),
-                 new ParameterOverride("element", current),
-                 new ParameterOverride("locator", locator),
-                 new ParameterOverride("container", this.container)
-            });
-        }
+        private TElement Resolve<TElement>(WebDriver driver, IWebElement element, Locator locator) where TElement : IElement => _scope.Resolve<TElement>
+                (
+                    new TypedParameter(typeof(WebDriver), driver),
+                    new TypedParameter(typeof(IWebElement), element),
+                    new TypedParameter(typeof(Locator), locator),
+                    new TypedParameter(typeof(ILifetimeScope), _scope)
+                );
     }
 }

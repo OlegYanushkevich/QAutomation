@@ -9,41 +9,38 @@
     {
         private readonly ICookieJar cookieJar;
 
-        public CookiesService(ICookieJar cookieJar)
-        {
-            this.cookieJar = cookieJar;
-        }
+        public CookiesService(ICookieJar cookieJar) => this.cookieJar = cookieJar;
 
         public IReadOnlyCollection<Core.Cookie> GetAll() =>
-            this.cookieJar.AllCookies.Select(c => new Core.Cookie(c.Name, c.Value, c.Path, c.Domain, c.Expiry)).ToList().AsReadOnly();
+            cookieJar.AllCookies.Select(c => new Core.Cookie(c.Name, c.Value, c.Path, c.Domain, c.Expiry)).ToList().AsReadOnly();
 
         public Core.Cookie GetByName(string cookieName)
         {
-            var cookie = this.cookieJar.GetCookieNamed(cookieName);
+            var cookie = cookieJar.GetCookieNamed(cookieName);
             return new Core.Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Expiry);
         }
 
         public ICookiesService Add(Core.Cookie cookie)
         {
-            this.cookieJar.AddCookie(new Cookie(cookie.Name, cookie.Value, cookie.Domain, cookie.Expiry));
+            cookieJar.AddCookie(new Cookie(cookie.Name, cookie.Value, cookie.Domain, cookie.Expiry));
             return this;
         }
 
         public ICookiesService Delete(Core.Cookie cookie)
         {
-            this.cookieJar.DeleteCookie(new Cookie(cookie.Name, cookie.Value, cookie.Domain, cookie.Expiry));
+            cookieJar.DeleteCookie(new Cookie(cookie.Name, cookie.Value, cookie.Domain, cookie.Expiry));
             return this;
         }
 
         public ICookiesService DeleteAll()
         {
-            this.cookieJar.DeleteAllCookies();
+            cookieJar.DeleteAllCookies();
             return this;
         }
 
         public ICookiesService DeleteByName(string cookieName)
         {
-            this.cookieJar.DeleteCookieNamed(cookieName);
+            cookieJar.DeleteCookieNamed(cookieName);
             return this;
         }
     }

@@ -1,6 +1,8 @@
 ﻿namespace QAutomation.Selenium.Controls
 {
-    using global::Unity;
+    using System;
+    using System.Collections.Generic;
+    using Autofac;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Internal;
     using QAutomation.Core;
@@ -8,30 +10,57 @@
 
     public class Element : IWrapsElement, IElement
     {
-        public WebDriver WebDriver;
-
         private readonly ElementFinderService _service;
 
-        public IWebElement WrappedElement { get; }
+        public WebDriver WebDriver { get; }
 
-        internal ISearchContext Context => this.WrappedElement ?? this.Driver as ISearchContext;
+        private IWebElement _wrappedElement;
 
-        public Element(WebDriver driver, IWebElement element, Locator locator, IUnityContainer container)
+        public IWebElement WrappedElement
+        {
+            get
+            {
+                return IsAvailable(_wrappedElement)
+                    ? _wrappedElement
+                    : NullWebElement.Instance;
+            }
+            private set
+            {
+                _wrappedElement = value;
+            }
+        }
+
+        private static bool IsAvailable(IWebElement element)
+        {
+            try
+            {
+                var location = element.Location;
+                return true;
+            }
+            catch (StaleElementReferenceException)
+            {
+                return false;
+            }
+        }
+
+        internal ISearchContext Context => WrappedElement ?? Driver as ISearchContext;
+
+        public Element(WebDriver driver, IWebElement element, Locator locator, ILifetimeScope scope)
         {
             WrappedElement = element;
             WebDriver = driver;
 
             Locator = locator;
-            _service = new ElementFinderService(container);
+            _service = new ElementFinderService(scope);
         }
 
-        public IWebDriver Driver => this.WebDriver.WrappedDriver;
+        public IWebDriver Driver => WebDriver.WrappedDriver;
 
-        public string Content => this.WrappedElement.Text;
+        public string Content => WrappedElement.Text;
 
-        public Point Location => new Point(this.WrappedElement.Location.X, this.WrappedElement.Location.Y);
+        public Point Location => new Point(WrappedElement.Location.X, WrappedElement.Location.Y);
 
-        public Size Size => new Size(this.WrappedElement.Size.Width, this.WrappedElement.Size.Height);
+        public Size Size => new Size(WrappedElement.Size.Width, WrappedElement.Size.Height);
 
         public State State
         {
@@ -39,15 +68,23 @@
             {
                 var accomulator = State.None;
 
-                if (this.WrappedElement.Displayed)
+                if (WrappedElement.Displayed)
+                {
                     accomulator |= State.Present;
+                }
                 else
+                {
                     accomulator |= State.Absent;
+                }
 
-                if (this.WrappedElement.Enabled)
+                if (WrappedElement.Enabled)
+                {
                     accomulator |= State.Enabled;
+                }
                 else
+                {
                     accomulator |= State.Disabled;
+                }
 
                 return accomulator;
             }
@@ -55,10 +92,16 @@
 
         public Locator Locator { get; set; }
 
-        public string GetAttribute(string attributeName) => this.WrappedElement.GetAttribute(attributeName);
-        public string GetProperty(string propertyName) => this.WrappedElement.GetProperty(propertyName);
-        public string GetCssValue(string cssStyleName) => this.WrappedElement.GetCssValue(cssStyleName);
+        public string GetAttribute(string attributeName) => WrappedElement.GetAttribute(attributeName);
 
-        public void Click() => this.WrappedElement.Click();
+        public string GetProperty(string propertyName) => WrappedElement.GetProperty(propertyName);
+
+        public string GetCssValue(string cssStyleName) => WrappedElement.GetCssValue(cssStyleName);
+
+        public void Click() => WrappedElement.Click();
+
+        public TElement Find<TElement>(Locator by) where TElement : IElement => _service.Find<TElement>(this, by);
+
+        public IEnumerable<TElement> FindAll<TElement>(Locator by) where TElement : IElement => _service.FindAll<TElement>(this, by);
     }
 }

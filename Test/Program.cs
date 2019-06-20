@@ -3,6 +3,8 @@
     using NLog;
     using NLog.Config;
     using NLog.Targets;
+    using OpenQA.Selenium;
+    using OpenQA.Selenium.Chrome;
     using QAutomation.AspectInjector;
     using QAutomation.Core;
     using QAutomation.Core.Interfaces;
@@ -10,48 +12,55 @@
     using QAutomation.Selenium;
     using QAutomation.Selenium.Configs;
     using QAutomation.Selenium.Controls;
-    using Unity;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     internal class Program
     {
         private static void Main(string[] args)
         {
-            var cfg = new LoggingConfiguration();
-            var target = new ConsoleTarget("logconsole");
+            IReadOnlyCollection<int> col = new ReadOnlyCollection<int>(new List<int> { 3, 4 });
 
-            cfg.AddTarget(target);
-            cfg.AddRuleForAllLevels(target);
+            col = null;
 
-            LogManager.Configuration = cfg;
+            IWebDriver driver = new ChromeDriver();
 
-            var container = new UnityContainer();
-            var config = new ChromeWebDriverConfig();
+            //var cfg = new LoggingConfiguration();
+            //var target = new ConsoleTarget("logconsole");
 
-            container.RegisterType<IElement, Element>();
-            container.RegisterType<ITextElement, TextElement>();
-            container.RegisterType<IFrameElement, FrameElement>();
-            container.RegisterType<INavigationService, NavigationService>();
-            container.RegisterType<IManageOptions, ManageOptionsService>();
-            container.RegisterType<ICookiesService, CookiesService>();
-            container.RegisterType<IWindowsService, WindowsService>();
-            container.RegisterType<ITargetLocatorService, TargetLocatorService>();
+            //cfg.AddTarget(target);
+            //cfg.AddRuleForAllLevels(target);
 
-            container.RegisterType<IDriver, WebDriver>();
-            container.RegisterInstance<WebDriverConfig>(config);
-            container.RegisterInstance<IUnityContainer>(container);
+            //LogManager.Configuration = cfg;
 
-            var driver = container.Resolve<IDriver>();
+            //var container = new UnityContainer();
+            //var config = new ChromeWebDriverConfig();
 
-            driver.Navigate().Url("https://google.com");
+            //container.RegisterType<IElement, Element>();
+            //container.RegisterType<ITextElement, TextElement>();
+            //container.RegisterType<IFrameElement, FrameElement>();
+            //container.RegisterType<INavigationService, NavigationService>();
+            //container.RegisterType<IManageOptions, ManageOptionsService>();
+            //container.RegisterType<ICookiesService, CookiesService>();
+            //container.RegisterType<IWindowsService, WindowsService>();
+            //container.RegisterType<ITargetLocatorService, TargetLocatorService>();
 
-            var input = driver.Find<ITextElement>(Locator.CssSelector("[name='q']"));
-            input.SendKeys("Oleg Yanushkevich");
+            //container.RegisterType<IDriver, WebDriver>();
+            //container.RegisterInstance<WebDriverConfig>(config);
+            //container.RegisterInstance<IUnityContainer>(container);
 
-            var findBtn = driver.Find<IElement>(Locator.XPath("(.//input[@name='btnK'])[2]"));
+            //var driver = container.Resolve<IDriver>();
 
-            findBtn.Click();
+            //driver.Navigate().Url("https://google.com");
 
-            driver.Quit();
+            //var input = driver.Find<ITextElement>(Locator.CssSelector("[name='q']"));
+            //input.SendKeys("Oleg Yanushkevich");
+
+            //var findBtn = driver.Find<IElement>(Locator.XPath("(.//input[@name='btnK'])[2]"));
+
+            //findBtn.Click();
+
+            //driver.Quit();
         }
     }
 }

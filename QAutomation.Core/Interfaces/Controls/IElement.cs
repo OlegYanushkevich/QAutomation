@@ -1,6 +1,6 @@
 ﻿namespace QAutomation.Core.Interfaces.Controls
 {
-    public interface IElement
+    public interface IElement : IElementFinderService
     {
         Locator Locator { get; set; }
 

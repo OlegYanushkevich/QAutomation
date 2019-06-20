@@ -6,12 +6,11 @@
 //----------------
 namespace QAutomation.Selenium
 {
-    using System.Collections.Generic;
-    using System.Linq;
+    using Autofac;
     using OpenQA.Selenium;
     using QAutomation.Core.Interfaces;
-    using Unity;
-    using Unity.Resolution;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Service for managing browser windows
@@ -21,53 +20,49 @@ namespace QAutomation.Selenium
         /// <summary>
         /// Field that contains <see cref="IWebDriver"/> instance
         /// </summary>
-        private readonly IWebDriver driver;
+        private readonly IWebDriver _driver;
 
-        private readonly IUnityContainer container;
+        private readonly ILifetimeScope _scope;
 
-        private Core.Interfaces.IWindow current;
+        private Core.Interfaces.IWindow _current;
 
         /// <summary>
         /// Gets current browser window
         /// </summary>
-        public Core.Interfaces.IWindow Current
-        {
-            get => current ?? (current = this.container.Resolve<Core.Interfaces.IWindow>(new ParameterOverride(nameof(driver), driver)));
-        }
+        public Core.Interfaces.IWindow Current => _current ?? (_current = _scope.Resolve<Core.Interfaces.IWindow>(new TypedParameter(typeof(IWebDriver), _driver)));
 
         /// <summary>
         /// Contains all windows handless
         /// </summary>
-        public IReadOnlyCollection<string> Handles => this.driver.WindowHandles;
+        public IReadOnlyCollection<string> Handles => _driver.WindowHandles;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowsService"/> class.
         /// </summary>
         /// <param name="driver">instance of web driver</param>
-        public WindowsService(IWebDriver driver, IUnityContainer container)
+        public WindowsService(IWebDriver driver, ILifetimeScope scope)
         {
-            this.driver = driver;
-            this.container = container;
+            _driver = driver;
+            _scope = scope;
         }
 
-        public Core.Interfaces.IWindow SwitchToLastWindow() => this.SwitchToWindow(Handles.Last());
+        public Core.Interfaces.IWindow SwitchToLastWindow() => SwitchToWindow(Handles.Last());
 
         public Core.Interfaces.IWindow SwitchToWindow(string handle)
         {
-            driver.SwitchTo().Window(handle);
+            _driver.SwitchTo().Window(handle);
             return Current;
         }
 
         public Core.Interfaces.IWindow CloseCurrentWindow()
         {
-            if (this.Handles.Count > 1)
+            if (Handles.Count > 1)
             {
-                this.driver.Close();
-                return this.SwitchToLastWindow();
+                _driver.Close();
+                return SwitchToLastWindow();
             }
-            this.driver.Close();
+            _driver.Close();
             return null;
         }
-
     }
 }

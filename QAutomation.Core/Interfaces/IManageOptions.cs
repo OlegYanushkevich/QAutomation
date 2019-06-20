@@ -3,6 +3,7 @@
     public interface IManageOptions
     {
         ICookiesService Cookies();
+
         IWindowsService Windows();
     }
 }
